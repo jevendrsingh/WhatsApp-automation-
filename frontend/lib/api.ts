@@ -1,20 +1,22 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8000";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8080/api";
 
-export async function apiRequest(path: string, method = "GET", token?: string, body?: unknown) {
+export async function apiRequest<T>(path: string, options: RequestInit = {}, token?: string): Promise<T> {
   const response = await fetch(`${API_BASE}${path}`, {
-    method,
+    ...options,
     headers: {
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options.headers || {})
     },
-    body: body ? JSON.stringify(body) : undefined,
-    cache: "no-store",
+    cache: "no-store"
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: "Request failed" }));
-    throw new Error(error.detail || "Request failed");
+    const body = await response.json().catch(() => ({}));
+    throw new Error(body.error || "Request failed");
   }
 
   return response.json();
 }
+
+export { API_BASE };
