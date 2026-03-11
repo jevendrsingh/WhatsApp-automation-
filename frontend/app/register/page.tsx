@@ -15,8 +15,11 @@ export default function RegisterPage() {
     event.preventDefault();
     setError("");
     try {
-      const data = await apiRequest("/auth/register", "POST", undefined, { name, email, password });
-      localStorage.setItem("token", data.access_token);
+      const data = await apiRequest<{ token: string }>("/auth/signup", {
+        method: "POST",
+        body: JSON.stringify({ fullName: name, email, password })
+      });
+      localStorage.setItem("token", data.token);
       router.push("/dashboard");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed");

@@ -2,8 +2,8 @@ import "./globals.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "WhatsApp AI SaaS",
-  description: "Multi-tenant WhatsApp AI automation platform",
+  title: "AgentChat AI",
+  description: "Turn your website into an AI customer support agent"
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
